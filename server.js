@@ -27,6 +27,14 @@ function formatMessage(raw) {
     const dir =
       side === "long" ? "LONG" : side === "short" ? "SHORT" : (data.side || "SIGNAL");
 
+    if (data.type === "sweep") {
+      const lines = [`⚠️ SWEEP ${emoji} ${dir} ${data.symbol || ""}`.trim()];
+      lines.push("Это только свип уровня, не сигнал на вход — ждём подтверждения");
+      if (data.price !== undefined) lines.push(`Цена: ${data.price}`);
+      lines.push(`Время: ${new Date().toISOString()}`);
+      return lines.join("\n");
+    }
+
     const lines = [`${emoji} ${dir} ${data.symbol || ""}`.trim()];
     if (data.price !== undefined) lines.push(`Вход: ${data.price}`);
     if (data.sl !== undefined) lines.push(`Stop-Loss: ${data.sl}`);
